@@ -16,9 +16,8 @@ jobs:
           fetch-depth: 0
 
       - name: Run Aikido Scan
-        uses: aikido-sec/github-actions@v2
+        # Atualizado para o nome correto do repositório da Action
+        uses: aikido-sec/github-actions-workflow-action@v2
         with:
-          # Use o segredo que você já configurou
-          api-key: ${{ secrets.AIKIDO_API_KEY }}
-          # Falha o build se encontrar vulnerabilidades críticas
+          aikido-api-key: ${{ secrets.AIKIDO_API_KEY }}
           fail-on-priority: 'critical'
