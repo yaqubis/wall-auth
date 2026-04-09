@@ -1,0 +1,20 @@
+name: Aikido Security Scan
+
+on: [push, pull_request]
+
+jobs:
+  aikido-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install and Run Aikido CLI
+        env:
+          AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
+        run: |
+          # Baixa e instala o CLI do Aikido
+          curl -sSL https://raw.githubusercontent.com/aikido-sec/clitool/main/install.sh | bash
+          
+          # Executa o scan. O comando falhará se encontrar vulnerabilidades críticas (opcional)
+          aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on critical
