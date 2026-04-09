@@ -9,14 +9,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Aikido CLI
-        # Instalando via npm garantimos que o binário esteja no PATH do runner
-        run: npm install -g @aikido/cli
-
-      - name: Run Scan
-        env:
-          # Use o Client Secret que você gerou na tela "GH"
-          AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
-        run: |
-          # Agora o comando 'aikido-cli' será reconhecido nativamente
-          aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on critical
+      - name: Run Aikido Scan
+        # Esta é a Action oficial e atualizada deles no marketplace
+        uses: aikidosec/github-actions-workflow-action@v2.0.1
+        with:
+          # Aqui está o ponto chave: use o Client Secret que você gerou na tela "GH"
+          aikido-api-key: ${{ secrets.AIKIDO_API_KEY }}
+          fail-on-priority: 'critical'
