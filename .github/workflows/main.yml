@@ -15,6 +15,37 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install and Run Aikido CLI
+        env:
+          AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
+        run: |
+          # Baixa o binário diretamente do link de download oficial (Linux 64-bit)
+          curl -L https://github.com/aikido-sec/clitool/releases/download/v0.1.0/aikido-cli-linux-x64 -o aikido-cli
+          
+          # Se o link acima falhar (404), tente este que aponta para a 'latest':
+          # curl -L https://github.com/aikido-sec/clitool/releases/latest/download/aikido-cli-linux-x64 -o aikido-cli
+
+          # Dá permissão de execução
+          chmod +x aikido-cli
+          
+          # Roda o scan apontando para a pasta atual
+          ./aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on criticalname: Aikido Security Scan
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  aikido-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Run Aikido Scan via Docker
         env:
           AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
