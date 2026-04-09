@@ -1,20 +1,31 @@
 name: Aikido Security Scan
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   aikido-scan:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Melhora a detecção de segredos no histórico do Git
 
       - name: Install and Run Aikido CLI
         env:
           AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
         run: |
-          # Baixa e instala o CLI do Aikido
-          curl -sSL https://raw.githubusercontent.com/aikido-sec/clitool/main/install.sh | bash
+          # 1. Baixa o binário oficial mais recente para Linux x64
+          curl -L https://github.com/aikido-sec/clitool/releases/latest/download/aikido-cli-linux-x64 -o aikido-cli
           
-          # Executa o scan. O comando falhará se encontrar vulnerabilidades críticas (opcional)
-          aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on critical
+          # 2. Concede permissão de execução ao binário
+          chmod +x aikido-cli
+          
+          # 3. Executa o escaneamento
+          # O scan identifica automaticamente seu pom.xml/build.gradle e código Java
+          ./aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on critical
