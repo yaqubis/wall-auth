@@ -15,9 +15,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Aikido Scan
-        # Atualizado para o nome correto do repositório da Action
-        uses: aikido-sec/github-actions-workflow-action@v2
-        with:
-          aikido-api-key: ${{ secrets.AIKIDO_API_KEY }}
-          fail-on-priority: 'critical'
+      - name: Run Aikido Scan via Docker
+        env:
+          AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
+        run: |
+          docker run -v $(pwd):/src \
+          -e AIKIDO_API_KEY=$AIKIDO_API_KEY \
+          aikidosec/aikido-cli \
+          scan /src --fail-on critical
