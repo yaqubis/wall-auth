@@ -15,11 +15,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Aikido Scan via Docker
+      - name: Install and Run Aikido CLI
         env:
           AIKIDO_API_KEY: ${{ secrets.AIKIDO_API_KEY }}
         run: |
-          docker run -v $(pwd):/src \
-          -e AIKIDO_API_KEY=$AIKIDO_API_KEY \
-          aikidosec/aikido-cli \
-          scan /src --fail-on critical
+          # 1. Instala o CLI usando o instalador verificado
+          curl -sSL https://raw.githubusercontent.com/aikido-sec/clitool/master/install.sh | bash
+          
+          # 2. O instalador geralmente coloca o binário em /usr/local/bin ou no diretório atual.
+          # Vamos tentar rodar diretamente. Se não estiver no path, tentamos o caminho relativo.
+          if command -v aikido-cli &> /dev/null; then
+            aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on critical
+          else
+            ./aikido-cli scan . --api-key $AIKIDO_API_KEY --fail-on critical
+          fi
