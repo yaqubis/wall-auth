@@ -2,6 +2,7 @@ package br.com.wallauth.service.impl;
 
 import br.com.wallauth.model.User;
 import br.com.wallauth.model.consts.ExceptionMessages;
+import br.com.wallauth.model.dto.LoginDto;
 import br.com.wallauth.model.dto.PasswordChangeDto;
 import br.com.wallauth.model.dto.RegisterDto;
 import br.com.wallauth.model.dto.UserDto;
@@ -9,8 +10,11 @@ import br.com.wallauth.model.exception.*;
 import br.com.wallauth.repository.UserRepository;
 import br.com.wallauth.service.JwtService;
 import br.com.wallauth.service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -48,17 +53,31 @@ public class UserServiceImpl implements UserService {
 
         User userEntity = user.fromDto();
         userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+
         User savedUser = this.repository.save(userEntity);
         return UserDto.fromEntity(savedUser);
     }
-    
+
+    @Transactional
     @NullMarked
     @Override
     public void changePassword(PasswordChangeDto passwordChangeDto) {
 
       User passwordChange = this.changePasswordValidation(passwordChangeDto.id(), passwordChangeDto.oldPassword(), passwordChangeDto.newPassword());
-
       repository.save(passwordChange);
+    }
+
+
+    @Transactional
+    @Override
+    public String login(LoginDto login) {
+
+        var authenticationToken = new UsernamePasswordAuthenticationToken(login.username(), login.password());
+
+        var authentication = authenticationManager.authenticate(authenticationToken);
+
+        return this.jwtService.generateToken(Objects.requireNonNull(authentication.getPrincipal()).toString());
+
     }
 
     private void validateUserCreation(RegisterDto user) {
