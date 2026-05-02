@@ -1,7 +1,9 @@
 package br.com.wallauth.model.dto;
 
+import java.util.UUID;
+
 public record PasswordChangeDto(
-        Long id,
+        UUID id,
         String oldPassword,
         String newPassword
 ) {

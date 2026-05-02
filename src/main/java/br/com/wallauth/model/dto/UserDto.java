@@ -4,10 +4,11 @@ import br.com.wallauth.model.Role;
 import br.com.wallauth.model.User;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record UserDto(
-        Long id,
-        String username,
+        UUID id,
         String password,
         String email,
         Role role
@@ -16,7 +17,6 @@ public record UserDto(
         return UserDto.builder()
                 .id(user.getId())
                 .password(user.getPassword())
-                .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .build();
@@ -25,7 +25,6 @@ public record UserDto(
     public User fromDto() {
         return User.builder()
                 .id(id)
-                .username(username)
                 .password(password)
                 .email(email)
                 .role(role)

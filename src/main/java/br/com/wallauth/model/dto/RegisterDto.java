@@ -9,7 +9,6 @@ import lombok.Builder;
 
 @Builder
 public record RegisterDto(
-        String username,
         @NotBlank
         @Size(min = 8, max = 100)
         @Pattern(
@@ -23,7 +22,6 @@ public record RegisterDto(
     public static RegisterDto fromEntity(User user) {
         return RegisterDto.builder()
                 .password(user.getPassword())
-                .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .build();
@@ -31,7 +29,6 @@ public record RegisterDto(
 
     public User fromDto() {
         return User.builder()
-                .username(username)
                 .password(password)
                 .email(email)
                 .role(role)

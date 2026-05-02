@@ -1,18 +1,18 @@
 package br.com.wallauth.controller;
 
 
+import br.com.wallauth.model.dto.LoginDto;
 import br.com.wallauth.model.dto.PasswordChangeDto;
 import br.com.wallauth.model.dto.RegisterDto;
 import br.com.wallauth.model.dto.UserDto;
 import br.com.wallauth.service.UserService;
 import jakarta.websocket.server.PathParam;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 public class AuthController {
@@ -22,11 +22,17 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-
     @PostMapping("/login")
-    public String login(){
+    public ResponseEntity<Void> login(@RequestBody LoginDto login){
 
-        return "";
+        String token = this.userService.login(login);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Authorization", "Bearer " + token);
+        responseHeaders.set("X-Request-ID", UUID.randomUUID().toString());
+
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .build();
     }
 
     @PostMapping("/register")
