@@ -39,3 +39,9 @@ out/
 ### AI Agents ###
 AGENTS.md
 agents.md
+
+### Docker ###
+.env
+
+### MCP ###
+.mcp.json

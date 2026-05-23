@@ -1,0 +1,14 @@
+services:
+  wall-auth:
+    build: .
+    container_name: wall-auth-app
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/int-health-db
+      SPRING_DATASOURCE_USERNAME: ${DB_USR}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PWD}
+      DB_USR: ${DB_USR}
+      DB_PWD: ${DB_PWD}
+      JWT_SECRET: ${JWT_SECRET}
