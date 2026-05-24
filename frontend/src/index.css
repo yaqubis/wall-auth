@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background-color: #F9F7F3;
+    color: #1C1C1A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .bg-junto-warm {
+    background: linear-gradient(135deg, #F2EDE4 0%, #EFF4F1 100%);
+  }
+
+  .bg-sage-gradient {
+    background: linear-gradient(135deg, #4A7C5F 0%, #5B9B7A 100%);
+  }
+
+  .bg-terra-gradient {
+    background: linear-gradient(135deg, #C06840 0%, #D4855A 100%);
+  }
+
+  .bg-panel-fade {
+    background: linear-gradient(180deg, transparent 35%, rgba(28,28,26,0.75) 100%);
+  }
+
+  .shadow-button {
+    box-shadow: 0 4px 16px rgba(192,104,64,0.25);
+  }
+
+  .shadow-sage-button {
+    box-shadow: 0 4px 16px rgba(74,124,95,0.25);
+  }
+
+  .text-ink {
+    color: #1C1C1A;
+  }
+
+  .border-junto {
+    border-color: #E5DDD0;
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Smooth card drag */
+.card-drag {
+  will-change: transform;
+  touch-action: none;
+}
+
+/* Swipe card animations */
+@keyframes swipe-right {
+  to { transform: translateX(120%) rotate(20deg); opacity: 0; }
+}
+
+@keyframes swipe-left {
+  to { transform: translateX(-120%) rotate(-20deg); opacity: 0; }
+}
+
+@keyframes swipe-up {
+  to { transform: translateY(-120%) scale(0.8); opacity: 0; }
+}
