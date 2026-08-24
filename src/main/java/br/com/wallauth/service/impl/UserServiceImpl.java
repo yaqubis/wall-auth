@@ -11,7 +11,6 @@ import br.com.wallauth.repository.UserRepository;
 import br.com.wallauth.service.JwtService;
 import br.com.wallauth.service.UserService;
 import lombok.extern.log4j.Log4j2;
-import org.jspecify.annotations.NullMarked;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +41,6 @@ public class UserServiceImpl implements UserService {
         this.jwtService = jwtService;
     }
     
-    @NullMarked
     @Override
     public UserDetails loadUserByUsername( String username) throws UsernameNotFoundException {
         return repository.findByEmail(username)
@@ -62,7 +60,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    @NullMarked
     @Override
     public void changePassword(PasswordChangeDto passwordChangeDto) {
 

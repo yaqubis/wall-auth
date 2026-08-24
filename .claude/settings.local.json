@@ -1,6 +1,18 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(start:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "github"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }
